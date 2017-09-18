@@ -1,10 +1,3 @@
-/**
- * Eye Tribe for Processing library
- * Weighted Grid example: Simple example showing how to get gaze data.
- * August 2015
- * http://jorgecardoso.eu
- **/
- 
 // import org.jorgecardoso.processing.eyetribe.*;
 // import com.theeyetribe.client.data.*;
 
@@ -18,6 +11,8 @@ int frame = 60;
 PGraphics pg,birdPg;
 int i = 0;
 int moveSpeed = 10;
+int collisionNum = 0;
+PFont font;
 
 void setup() {
   fullScreen();
@@ -28,6 +23,8 @@ void setup() {
   pg.beginDraw();
   pg.image(img,0, 0, width, height);
   pg.endDraw();
+  font = createFont("Yu Gothic",48,true); //フォントを指定
+  textFont(font);
   // smooth();
   // point = new PVector();
   // eyeTribe = new EyeTribe(this);
@@ -44,7 +41,7 @@ void draw() {
   bird.draw();
   bird.collision();
   textSize(30);
-  text("" + i, 10, 30);
+  text("得点：" + collisionNum, 10, 30);
 }
 
 void Mouse(float mX, float mY){
@@ -129,6 +126,7 @@ class Bird {
         birdY = (int)random(0, height);
         birdX = width;
       }
+      collisionNum ++;
     }
   }
 }

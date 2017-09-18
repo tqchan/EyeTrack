@@ -14,13 +14,6 @@ import java.io.IOException;
 
 public class EyeTrack extends PApplet {
 
-/**
- * Eye Tribe for Processing library
- * Weighted Grid example: Simple example showing how to get gaze data.
- * August 2015
- * http://jorgecardoso.eu
- **/
- 
 // import org.jorgecardoso.processing.eyetribe.*;
 // import com.theeyetribe.client.data.*;
 
@@ -34,6 +27,8 @@ int frame = 60;
 PGraphics pg,birdPg;
 int i = 0;
 int moveSpeed = 10;
+int collisionNum = 0;
+PFont font;
 
 public void setup() {
   
@@ -44,6 +39,8 @@ public void setup() {
   pg.beginDraw();
   pg.image(img,0, 0, width, height);
   pg.endDraw();
+  font = createFont("Yu Gothic",48,true); //\u30d5\u30a9\u30f3\u30c8\u3092\u6307\u5b9a
+  textFont(font);
   // smooth();
   // point = new PVector();
   // eyeTribe = new EyeTribe(this);
@@ -60,7 +57,7 @@ public void draw() {
   bird.draw();
   bird.collision();
   textSize(30);
-  text("" + i, 10, 30);
+  text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
 }
 
 public void Mouse(float mX, float mY){
@@ -145,6 +142,7 @@ class Bird {
         birdY = (int)random(0, height);
         birdX = width;
       }
+      collisionNum ++;
     }
   }
 }
