@@ -32,7 +32,8 @@ Bird bird;
 int R,G,B = 0;
 int frame = 60;
 PGraphics pg,birdPg;
-int i;
+int i = 0;
+int moveSpeed = 10;
 
 public void setup() {
   
@@ -67,6 +68,16 @@ public void Mouse(float mX, float mY){
   ellipse(mX, mY, 10, 10);
 }
 
+public void keyPressed(){
+  if (key == ENTER) {
+    exit();
+  }
+}
+
+public void mousePressed(){
+  i++;
+}
+
 // void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
 
 //   if ( gaze != null ) {
@@ -90,7 +101,13 @@ class Bird {
   public void setup() {
     birdImage = loadImage("data/bird.png");
     birdPg = createGraphics(width/10, height/10);
-    birdX = (int)random(0, width);
+    if (i % 2 == 0) {
+      birdX = (int)random(0, width);
+      birdY = 0;
+    } else {
+      birdY = (int)random(0, height);
+      birdX = width;
+    }
     birdPg.beginDraw();
     birdPg.image(birdImage, 0, 0);
     birdPg.endDraw();
@@ -99,10 +116,18 @@ class Bird {
   public void draw() {
     image(birdPg, birdX, birdY);
     noStroke();
-    birdY += 2;
-    if (birdY == height) {
-      birdX = (int)random(0, width);
-      birdY = 0;
+    if (i % 2 == 0) {
+      birdY += moveSpeed;
+      if (birdY >= height) {
+        birdX = (int)random(0, width);
+        birdY = 0;
+      }
+    } else {
+      birdX -= moveSpeed;
+      if (birdX <= 0) {
+        birdY = (int)random(0, height);
+        birdX = width;
+      }
     }
   }
 
@@ -113,9 +138,13 @@ class Bird {
     mX = mouseX;
     mY = mouseY;
     if (bX <= mX && mX <= bX + birdImage.width && bY <= mY && mY <= bY + birdImage.height){
-      birdX = (int)random(0, width);
-      birdY = 0;
-      i++;
+      if (i % 2 == 0) {
+        birdX = (int)random(0, width);
+        birdY = 0;
+      } else {
+        birdY = (int)random(0, height);
+        birdX = width;
+      }
     }
   }
 }
