@@ -6,6 +6,7 @@ float grid[][];
 PVector point;
 PImage img,birdImage;
 Bird bird;
+// Bird bird2;
 int R,G,B = 0;
 int frame = 60;
 PGraphics pg,birdPg;
@@ -16,20 +17,22 @@ PFont font;
 
 void setup() {
   fullScreen();
-  // size(800, 600);
   frameRate(frame);
   img = loadImage("data/kumo2.png");
   pg = createGraphics(width, height);
   pg.beginDraw();
   pg.image(img,0, 0, width, height);
   pg.endDraw();
-  font = createFont("Yu Gothic",48,true); //フォントを指定
+  //日本語を表示するためにフォントを指定
+  font = createFont("Yu Gothic",48,true);
   textFont(font);
   // smooth();
   // point = new PVector();
   // eyeTribe = new EyeTribe(this);
   bird = new Bird();
   bird.setup();
+  // bird2 = new Bird();
+  // bird2.setup();
 
 }
 
@@ -40,6 +43,8 @@ void draw() {
   Mouse(mouseX,mouseY);
   bird.draw();
   bird.collision();
+  // bird2.draw();
+  // bird2.collision();
   textSize(30);
   text("得点：" + collisionNum, 10, 30);
 }
@@ -60,13 +65,10 @@ void mousePressed(){
 }
 
 // void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
-
 //   if ( gaze != null ) {
-//     point = gaze.get(); 
-
+//     point = gaze.get();
 //     int x = (int)constrain(round(map(point.x, 0, width, 0, COLS-1)), 0, COLS-1);
 //     int y = (int)constrain(round(map(point.y, 0, height, 0, ROWS-1)), 0, ROWS-1);
-    
 //     grid[y][x] = constrain( grid[y][x]+10, 0, 255);
 //   }
 // }

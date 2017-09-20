@@ -22,6 +22,7 @@ float grid[][];
 PVector point;
 PImage img,birdImage;
 Bird bird;
+// Bird bird2;
 int R,G,B = 0;
 int frame = 60;
 PGraphics pg,birdPg;
@@ -32,20 +33,22 @@ PFont font;
 
 public void setup() {
   
-  // size(800, 600);
   frameRate(frame);
   img = loadImage("data/kumo2.png");
   pg = createGraphics(width, height);
   pg.beginDraw();
   pg.image(img,0, 0, width, height);
   pg.endDraw();
-  font = createFont("Yu Gothic",48,true); //\u30d5\u30a9\u30f3\u30c8\u3092\u6307\u5b9a
+  //\u65e5\u672c\u8a9e\u3092\u8868\u793a\u3059\u308b\u305f\u3081\u306b\u30d5\u30a9\u30f3\u30c8\u3092\u6307\u5b9a
+  font = createFont("Yu Gothic",48,true);
   textFont(font);
   // smooth();
   // point = new PVector();
   // eyeTribe = new EyeTribe(this);
   bird = new Bird();
   bird.setup();
+  // bird2 = new Bird();
+  // bird2.setup();
 
 }
 
@@ -56,6 +59,8 @@ public void draw() {
   Mouse(mouseX,mouseY);
   bird.draw();
   bird.collision();
+  // bird2.draw();
+  // bird2.collision();
   textSize(30);
   text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
 }
@@ -76,13 +81,10 @@ public void mousePressed(){
 }
 
 // void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
-
 //   if ( gaze != null ) {
-//     point = gaze.get(); 
-
+//     point = gaze.get();
 //     int x = (int)constrain(round(map(point.x, 0, width, 0, COLS-1)), 0, COLS-1);
 //     int y = (int)constrain(round(map(point.y, 0, height, 0, ROWS-1)), 0, ROWS-1);
-    
 //     grid[y][x] = constrain( grid[y][x]+10, 0, 255);
 //   }
 // }
