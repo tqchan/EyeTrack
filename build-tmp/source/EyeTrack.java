@@ -21,8 +21,7 @@ public class EyeTrack extends PApplet {
 float grid[][];
 PVector point;
 PImage img,birdImage;
-Bird bird;
-Bird[] bird2 = new Bird[10];
+Bird[] bird = new Bird[10];
 int R,G,B = 0;
 int frame = 60;
 PGraphics pg,birdPg;
@@ -30,6 +29,7 @@ int i = 0;
 int moveSpeed = 10;
 int collisionNum = 0;
 PFont font;
+int a = 0;
 
 public void setup() {
   
@@ -45,15 +45,10 @@ public void setup() {
   // smooth();
   // point = new PVector();
   // eyeTribe = new EyeTribe(this);
-  // bird = new Bird();
-  // bird.setup();
-  for (int i = 0; i < bird2.length; i++) {
-    bird2[i] = new Bird();
-    bird2[i].setup();
+  for (int i = 0; i < bird.length; i++) {
+    bird[i] = new Bird();
+    bird[i].setup();
   }
-  // bird2 = new Bird();
-  // bird2.setup();
-
 }
 
 public void draw() {
@@ -61,13 +56,9 @@ public void draw() {
   image(pg, 0, 0);
   noStroke();
   Mouse(mouseX,mouseY);
-  // bird.draw();
-  // bird.collision();
-  // bird2.draw();
-  // bird2.collision();
-  for (int i = 0; i < bird2.length; i++) {
-    bird2[i].draw();
-    bird2[i].collision();
+  for (int i = 0; i < bird.length; i++) {
+    bird[i].draw();
+    bird[i].collision();
   }
   textSize(30);
   text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
@@ -130,7 +121,12 @@ class Bird {
         birdY = 0;
       }
     } else {
-      birdX -= moveSpeed;
+      // birdX -= moveSpeed;
+      a += moveSpeed;
+      float x = a * (4*PI/width);
+      float y = sin(x);
+      birdX = (int)x;
+      birdY = (int)y;
       if (birdX <= 0) {
         birdY = (int)random(0, height);
         birdX = width;
@@ -155,6 +151,45 @@ class Bird {
       collisionNum ++;
     }
   }
+}
+
+int CountX=0;
+
+public void setup() {
+  size(300, 300);                           // \u753b\u9762\u30b5\u30a4\u30ba
+  frameRate(40);                          // 1\u79d2\u9593\u306b40\u30b3\u30de\u63cf\u304f
+  background(255);                       // \u80cc\u666f\u8272\u3092\u8a2d\u5b9a
+}
+
+public void draw() {
+  if (CountX < width) {
+    CountX+=2;
+  } else {
+    CountX = 0;
+    background(255);                    // \u80cc\u666f\u8272\u3092\u767d\u306b\u8a2d\u5b9a
+  }
+  float x = CountX * (4*PI/width);
+  float y = sin(x);                         // \u8868\u793a\u30c7\u30fc\u30bf\uff08sin\u6ce2\uff09
+  myPrintChart(CountX, y);
+  myPrintText(y);
+}
+
+/* \u30b0\u30e9\u30d5\u8868\u793a */
+public void myPrintChart(int x, float y) {
+  stroke(50, 180, 200);                    // \u8f2a\u90ed\u7dda\u306e\u8272\u3092\u6307\u5b9a
+  fill(255);                                     // \u5857\u308a\u3064\u3076\u3057\u8272
+  int posY= (int)((-y+2)*(height/4));
+  ellipse(x, posY, 5, 5);                   // ellipse(x, y, width, height)
+}
+
+/* \u6570\u5024\u8868\u793a */
+public void myPrintText(float y) {
+  noStroke();                               // \u67a0\u3092\u63cf\u753b\u3057\u306a\u3044
+  fill(230, 230, 255);                      // \u5857\u308a\u3064\u3076\u3057\u306e\u8272\u3092\u6307\u5b9a  
+  rect(5, 5, 50, 20);                       // \u6587\u5b57\u8868\u793a\u57df rect(x, y, width, height); 
+  fill(0);                                       // \u6587\u5b57\u306e\u8272\u3092\u6307\u5b9a  
+  text(y, 10, 20);
+// println(y);
 }
   public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {

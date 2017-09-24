@@ -5,8 +5,7 @@
 float grid[][];
 PVector point;
 PImage img,birdImage;
-Bird bird;
-Bird[] bird2 = new Bird[10];
+Bird[] bird = new Bird[10];
 int R,G,B = 0;
 int frame = 60;
 PGraphics pg,birdPg;
@@ -14,6 +13,7 @@ int i = 0;
 int moveSpeed = 10;
 int collisionNum = 0;
 PFont font;
+int a = 0;
 
 void setup() {
   fullScreen();
@@ -29,15 +29,11 @@ void setup() {
   // smooth();
   // point = new PVector();
   // eyeTribe = new EyeTribe(this);
-  // bird = new Bird();
-  // bird.setup();
-  for (int i = 0; i < bird2.length; i++) {
-    bird2[i] = new Bird();
-    bird2[i].setup();
+  for (int i = 0; i < bird.length; i++) {
+    bird[i] = new Bird();
+    bird[i].setup();
   }
-  // bird2 = new Bird();
-  // bird2.setup();
-
+  a = width;
 }
 
 void draw() {
@@ -45,13 +41,9 @@ void draw() {
   image(pg, 0, 0);
   noStroke();
   Mouse(mouseX,mouseY);
-  // bird.draw();
-  // bird.collision();
-  // bird2.draw();
-  // bird2.collision();
-  for (int i = 0; i < bird2.length; i++) {
-    bird2[i].draw();
-    bird2[i].collision();
+  for (int i = 0; i < bird.length; i++) {
+    bird[i].draw();
+    bird[i].collision();
   }
   textSize(30);
   text("得点：" + collisionNum, 10, 30);
@@ -114,7 +106,12 @@ class Bird {
         birdY = 0;
       }
     } else {
-      birdX -= moveSpeed;
+      // birdX -= moveSpeed;
+      a -= moveSpeed;
+      float x = a * (4*PI/width);
+      float y = sin(x);
+      birdX = (int)x;
+      birdY = (int)y;
       if (birdX <= 0) {
         birdY = (int)random(0, height);
         birdX = width;
