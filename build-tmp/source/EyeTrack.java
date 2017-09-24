@@ -45,8 +45,8 @@ public void setup() {
   // smooth();
   // point = new PVector();
   // eyeTribe = new EyeTribe(this);
-  bird = new Bird();
-  bird.setup();
+  // bird = new Bird();
+  // bird.setup();
   for (int i = 0; i < bird2.length; i++) {
     bird2[i] = new Bird();
     bird2[i].setup();
@@ -61,8 +61,8 @@ public void draw() {
   image(pg, 0, 0);
   noStroke();
   Mouse(mouseX,mouseY);
-  bird.draw();
-  bird.collision();
+  // bird.draw();
+  // bird.collision();
   // bird2.draw();
   // bird2.collision();
   for (int i = 0; i < bird2.length; i++) {
