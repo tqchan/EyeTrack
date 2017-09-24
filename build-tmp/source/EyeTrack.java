@@ -22,7 +22,7 @@ float grid[][];
 PVector point;
 PImage img,birdImage;
 Bird bird;
-// Bird bird2;
+Bird[] bird2 = new Bird[10];
 int R,G,B = 0;
 int frame = 60;
 PGraphics pg,birdPg;
@@ -47,6 +47,10 @@ public void setup() {
   // eyeTribe = new EyeTribe(this);
   bird = new Bird();
   bird.setup();
+  for (int i = 0; i < bird2.length; i++) {
+    bird2[i] = new Bird();
+    bird2[i].setup();
+  }
   // bird2 = new Bird();
   // bird2.setup();
 
@@ -61,6 +65,10 @@ public void draw() {
   bird.collision();
   // bird2.draw();
   // bird2.collision();
+  for (int i = 0; i < bird2.length; i++) {
+    bird2[i].draw();
+    bird2[i].collision();
+  }
   textSize(30);
   text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
 }
