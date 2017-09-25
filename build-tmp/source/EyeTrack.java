@@ -26,10 +26,20 @@ int R,G,B = 0;
 int frame = 60;
 PGraphics pg,birdPg;
 int i = 0;
+int _sinMove = 0;
 int moveSpeed = 10;
 int collisionNum = 0;
 PFont font;
 int a = 0;
+//sin\u6ce2\u4f5c\u6210\u7528
+float x, y;  //x, y\u5ea7\u6a19
+float A;  //\u632f\u5e45
+float w;  //\u89d2\u5468\u6ce2\u6570\uff08\u5468\u671f\uff09
+float p2;  //\u52d5\u753b\u7528\u521d\u671f\u4f4d\u76f8
+float t2;  //\u30a2\u30cb\u30e1\u30fc\u30b7\u30e7\u30f3\u7528\u7d4c\u904e\u6642\u9593\uff08X\u5ea7\u6a19\uff09
+float rad = (TWO_PI/60.0f)/3;//1\u79d2\u30671\u56de\u8ee2\u3059\u308b\u3088\u3046\u306b30\u3067\u5272\u308b\u3002\u5ea6\u6570\u6cd5\u3060\u306812\u00b0,\u66f4\u306b3\u3067\u5272\u308b\u30681\u5468\u671f3\u79d2
+float w_r = 0.0f;
+float myScale = 100.0f;  //\u753b\u9762\u4e0a\u3067\u898b\u3084\u3059\u3044\u3088\u3046\u306b\u62e1\u5927
 
 public void setup() {
   
@@ -49,6 +59,8 @@ public void setup() {
     bird[i] = new Bird();
     bird[i].setup();
   }
+  a = width;
+  w_r = width / rad;
 }
 
 public void draw() {
@@ -56,10 +68,16 @@ public void draw() {
   image(pg, 0, 0);
   noStroke();
   Mouse(mouseX,mouseY);
-  for (int i = 0; i < bird.length; i++) {
-    bird[i].draw();
-    bird[i].collision();
+  if ((_sinMove % 2) == 0) {
+    for (int i = 0; i < bird.length; i++) {
+      bird[i].draw();
+      bird[i].collision();
+    }
+  } else {
+    bird[0].draw();
+    // bird[0].collision();
   }
+  
   textSize(30);
   text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
 }
@@ -72,6 +90,9 @@ public void Mouse(float mX, float mY){
 public void keyPressed(){
   if (key == ENTER) {
     exit();
+  }
+  if (key == BACKSPACE) {
+    _sinMove++;
   }
 }
 
@@ -109,29 +130,33 @@ class Bird {
     birdPg.beginDraw();
     birdPg.image(birdImage, 0, 0);
     birdPg.endDraw();
+    A = 200.0f;    //\u632f\u5e45\u3092\u8a2d\u5b9a
+    w = 1.0f;    //\u89d2\u5468\u6ce2\u6570\u3092\u8a2d\u5b9a
+    p2 = 0.0f;    //\u521d\u671f\u4f4d\u76f8\u3092\u8a2d\u5b9a
+    t2 = 0.0f;    //\u7d4c\u904e\u6642\u9593\u3092\u521d\u671f\u5316
   }
 
   public void draw() {
     image(birdPg, birdX, birdY);
     noStroke();
-    if (i % 2 == 0) {
-      birdY += moveSpeed;
-      if (birdY >= height) {
-        birdX = (int)random(0, width);
-        birdY = 0;
-      }
-    } else {
-      // birdX -= moveSpeed;
-      a += moveSpeed;
-      float x = a * (4*PI/width);
-      float y = sin(x);
-      birdX = (int)x;
-      birdY = (int)y;
-      if (birdX <= 0) {
-        birdY = (int)random(0, height);
-        birdX = width;
+    sinMove();
+    if ((_sinMove % 2) == 0) {
+      if (i % 2 == 0) {
+        birdY += moveSpeed;
+        if (birdY >= height) {
+          birdX = (int)random(0, width);
+          birdY = 0;
+        }
+      } else {
+        birdX -= moveSpeed;
+        if ((birdX <= 0) || (width <= birdX)) {
+          birdY = (int)random(0, height);
+          birdX = width;
+          a = width;
+        }
       }
     }
+    
   }
 
   public void collision(){
@@ -151,45 +176,34 @@ class Bird {
       collisionNum ++;
     }
   }
-}
 
-int CountX=0;
-
-public void setup() {
-  size(300, 300);                           // \u753b\u9762\u30b5\u30a4\u30ba
-  frameRate(40);                          // 1\u79d2\u9593\u306b40\u30b3\u30de\u63cf\u304f
-  background(255);                       // \u80cc\u666f\u8272\u3092\u8a2d\u5b9a
-}
-
-public void draw() {
-  if (CountX < width) {
-    CountX+=2;
-  } else {
-    CountX = 0;
-    background(255);                    // \u80cc\u666f\u8272\u3092\u767d\u306b\u8a2d\u5b9a
+  public void sinMove(){
+    if ((_sinMove % 2) == 1 ) {
+      // a += moveSpeed;
+      // float x = a * (2*PI/width);
+      // float y = sin(x);
+      // int posY= (int)((-y+2)*(height/4));
+      // ellipse(x, posY, 5, 5);
+      // birdX = (int)x;
+      // birdY = (int)posY;
+      // if (birdX <= 0) {
+      //     a = width;
+      //   }
+      x = t2*myScale;
+      y = -A*sin(w*t2 + p2);
+      // ellipse(x, y + height/2, 10, 10);
+      t2 += rad;    //\u6642\u9593\u3092\u9032\u3081\u308b
+      birdX = (int)x;
+      birdY = (int)y + height / 2;
+      float gamen = width/4 * rad;
+      if (t2 > gamen) {
+        t2 = 0.0f;//\u753b\u9762\u306e\u7aef\u306b\u884c\u3063\u305f\u3089\u539f\u70b9\u306b\u623b\u308b
+      }
+      text(t2, 10, 20);
+    } else {
+      t2 = 0.0f;
+    }
   }
-  float x = CountX * (4*PI/width);
-  float y = sin(x);                         // \u8868\u793a\u30c7\u30fc\u30bf\uff08sin\u6ce2\uff09
-  myPrintChart(CountX, y);
-  myPrintText(y);
-}
-
-/* \u30b0\u30e9\u30d5\u8868\u793a */
-public void myPrintChart(int x, float y) {
-  stroke(50, 180, 200);                    // \u8f2a\u90ed\u7dda\u306e\u8272\u3092\u6307\u5b9a
-  fill(255);                                     // \u5857\u308a\u3064\u3076\u3057\u8272
-  int posY= (int)((-y+2)*(height/4));
-  ellipse(x, posY, 5, 5);                   // ellipse(x, y, width, height)
-}
-
-/* \u6570\u5024\u8868\u793a */
-public void myPrintText(float y) {
-  noStroke();                               // \u67a0\u3092\u63cf\u753b\u3057\u306a\u3044
-  fill(230, 230, 255);                      // \u5857\u308a\u3064\u3076\u3057\u306e\u8272\u3092\u6307\u5b9a  
-  rect(5, 5, 50, 20);                       // \u6587\u5b57\u8868\u793a\u57df rect(x, y, width, height); 
-  fill(0);                                       // \u6587\u5b57\u306e\u8272\u3092\u6307\u5b9a  
-  text(y, 10, 20);
-// println(y);
 }
   public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
