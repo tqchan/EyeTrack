@@ -3,6 +3,9 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import org.jorgecardoso.processing.eyetribe.*; 
+import com.theeyetribe.client.data.*; 
+
 import java.util.HashMap; 
 import java.util.ArrayList; 
 import java.io.File; 
@@ -14,10 +17,10 @@ import java.io.IOException;
 
 public class EyeTrack extends PApplet {
 
-// import org.jorgecardoso.processing.eyetribe.*;
-// import com.theeyetribe.client.data.*;
 
-// EyeTribe eyeTribe;
+
+
+EyeTribe eyeTribe;
 float grid[][];
 PVector point;
 PImage img,birdImage;
@@ -30,6 +33,7 @@ int i = 0;
 int moveSpeed = 10;
 int collisionNum = 0;
 PFont font;
+int eyeX, eyeY;
 
 public void setup() {
   
@@ -44,7 +48,7 @@ public void setup() {
   textFont(font);
   // smooth();
   // point = new PVector();
-  // eyeTribe = new EyeTribe(this);
+  eyeTribe = new EyeTribe(this);
   bird = new Bird();
   bird.setup();
   // bird2 = new Bird();
@@ -56,7 +60,7 @@ public void draw() {
   // background(0);
   image(pg, 0, 0);
   noStroke();
-  Mouse(mouseX,mouseY);
+  // Mouse(mouseX,mouseY);
   bird.draw();
   bird.collision();
   // bird2.draw();
@@ -80,18 +84,22 @@ public void mousePressed(){
   i++;
 }
 
-// void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
-//   if ( gaze != null ) {
-//     point = gaze.get();
-//     int x = (int)constrain(round(map(point.x, 0, width, 0, COLS-1)), 0, COLS-1);
-//     int y = (int)constrain(round(map(point.y, 0, height, 0, ROWS-1)), 0, ROWS-1);
-//     grid[y][x] = constrain( grid[y][x]+10, 0, 255);
-//   }
-// }
+public void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
+  if ( gaze != null ) {
+    point = gaze.get();
+    // int x = (int)constrain(round(map(point.x, 0, width, 0, COLS-1)), 0, COLS-1);
+    // int y = (int)constrain(round(map(point.y, 0, height, 0, ROWS-1)), 0, ROWS-1);
+    // grid[y][x] = constrain(grid[y][x]+10, 0, 255);
+    eyeX = (int)point.x;
+    eyeY = (int)point.y;
+    fill(R,G,B,255);
+    ellipse(eyeX, eyeY, 20, 20);
+  }
+}
 
-// void trackerStateChanged(String state) {
-//   println("Tracker state: " + state);
-// }
+public void trackerStateChanged(String state) {
+  println("Tracker state: " + state);
+}
 
 
 class Bird {
@@ -134,8 +142,10 @@ class Bird {
     int bX,bY,mX,mY;
     bX = birdX;
     bY = birdY;
-    mX = mouseX;
-    mY = mouseY;
+    // mX = mouseX;
+    // mY = mouseY;
+    mX = eyeX;
+    mY = eyeY;
     if (bX <= mX && mX <= bX + birdImage.width && bY <= mY && mY <= bY + birdImage.height){
       if (i % 2 == 0) {
         birdX = (int)random(0, width);
