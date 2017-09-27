@@ -196,7 +196,7 @@ class Bird {
       if (t2 > gamen) {
         t2 = 0.0f;//\u753b\u9762\u306e\u7aef\u306b\u884c\u3063\u305f\u3089\u539f\u70b9\u306b\u623b\u308b
       }
-      text(t2, 10, 20);
+      // text(t2, 10, 20);
     } else {
       t2 = 0.0f;
     }
