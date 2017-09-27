@@ -1,6 +1,10 @@
 import org.jorgecardoso.processing.eyetribe.*;
 import com.theeyetribe.client.data.*;
-
+import ddf.minim.*;  //minimライブラリのインポート
+ 
+Minim minim;  //Minim型変数であるminimの宣言
+AudioPlayer player;  //サウンドデータ格納用の変数
+AudioPlayer player2;
 EyeTribe eyeTribe;
 float grid[][];
 PVector point;
@@ -46,7 +50,10 @@ void setup() {
   }
   a = width;
   w_r = width / rad;
-
+  minim = new Minim(this);  //初期化
+  player = minim.loadFile("bgm.mp3");  //mp3をロードする
+  player.play();  //再生
+  player2 = minim.loadFile("atari.mp3");
 }
 
 void draw() {
@@ -162,6 +169,8 @@ class Bird {
         birdY = (int)random(0, height);
         birdX = width;
       }
+      player2.play();
+      player2.rewind();  //再生が終わったら巻き戻しておく
       collisionNum ++;
     }
   }
@@ -177,7 +186,7 @@ class Bird {
       if (t2 > gamen) {
         t2 = 0.0;//画面の端に行ったら原点に戻る
       }
-      text(t2, 10, 20);
+      // text(t2, 10, 20);
     } else {
       t2 = 0.0;
     }
