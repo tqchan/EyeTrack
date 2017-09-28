@@ -5,6 +5,14 @@ import processing.opengl.*;
 
 import org.jorgecardoso.processing.eyetribe.*; 
 import com.theeyetribe.client.data.*; 
+import ddf.minim.*; 
+
+import ddf.minim.*; 
+import ddf.minim.analysis.*; 
+import ddf.minim.effects.*; 
+import ddf.minim.signals.*; 
+import ddf.minim.spi.*; 
+import ddf.minim.ugens.*; 
 
 import java.util.HashMap; 
 import java.util.ArrayList; 
@@ -19,7 +27,11 @@ public class EyeTrack extends PApplet {
 
 
 
-
+  //minim\u30e9\u30a4\u30d6\u30e9\u30ea\u306e\u30a4\u30f3\u30dd\u30fc\u30c8
+ 
+Minim minim;  //Minim\u578b\u5909\u6570\u3067\u3042\u308bminim\u306e\u5ba3\u8a00
+AudioPlayer player;  //\u30b5\u30a6\u30f3\u30c9\u30c7\u30fc\u30bf\u683c\u7d0d\u7528\u306e\u5909\u6570
+AudioPlayer player2;
 EyeTribe eyeTribe;
 float grid[][];
 PVector point;
@@ -65,7 +77,10 @@ public void setup() {
   }
   a = width;
   w_r = width / rad;
-
+  minim = new Minim(this);  //\u521d\u671f\u5316
+  player = minim.loadFile("bgm.mp3");  //mp3\u3092\u30ed\u30fc\u30c9\u3059\u308b
+  player.play();  //\u518d\u751f
+  player2 = minim.loadFile("atari.mp3");
 }
 
 public void draw() {
@@ -181,6 +196,8 @@ class Bird {
         birdY = (int)random(0, height);
         birdX = width;
       }
+      player2.play();
+      player2.rewind();  //\u518d\u751f\u304c\u7d42\u308f\u3063\u305f\u3089\u5dfb\u304d\u623b\u3057\u3066\u304a\u304f
       collisionNum ++;
     }
   }
