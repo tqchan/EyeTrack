@@ -8,7 +8,7 @@ AudioPlayer player2;
 EyeTribe eyeTribe;
 float grid[][];
 PVector point;
-PImage img,birdImage;
+PImage img,birdImage,mousePg;
 Bird[] bird = new Bird[10];
 int R,G,B = 0;
 int frame = 60;
@@ -41,8 +41,6 @@ void setup() {
   //日本語を表示するためにフォントを指定
   font = createFont("Yu Gothic",48,true);
   textFont(font);
-  // smooth();
-  // point = new PVector();
   eyeTribe = new EyeTribe(this);
   for (int i = 0; i < bird.length; i++) {
     bird[i] = new Bird();
@@ -50,6 +48,12 @@ void setup() {
   }
   a = width;
   w_r = width / rad;
+  //mouseに鳥の画像
+  mousePg = createGraphics(width, height);
+  mousePg.beginDraw();
+  mousePg.image(birdImage, 0, 0);
+  mousePg.endDraw();
+  //音楽
   minim = new Minim(this);  //初期化
   player = minim.loadFile("bgm.mp3");  //mp3をロードする
   player.play();  //再生
@@ -57,10 +61,8 @@ void setup() {
 }
 
 void draw() {
-  // background(0);
   image(pg, 0, 0);
   noStroke();
-  // Mouse(mouseX,mouseY);
   if ((_sinMove % 2) == 0) {
     for (int i = 0; i < bird.length; i++) {
       bird[i].draw();
@@ -68,7 +70,7 @@ void draw() {
     }
   } else {
     bird[0].draw();
-    // bird[0].collision();
+    bird[0].collision();
   }
   textSize(30);
   text("得点：" + collisionNum, 10, 30);
@@ -95,13 +97,13 @@ void mousePressed(){
 void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
   if ( gaze != null ) {
     point = gaze.get();
-    // int x = (int)constrain(round(map(point.x, 0, width, 0, COLS-1)), 0, COLS-1);
-    // int y = (int)constrain(round(map(point.y, 0, height, 0, ROWS-1)), 0, ROWS-1);
-    // grid[y][x] = constrain(grid[y][x]+10, 0, 255);
     eyeX = (int)point.x;
     eyeY = (int)point.y;
-    fill(R,G,B,255);
-    ellipse(eyeX, eyeY, 20, 20);
+    // fill(R,G,B,255);
+    // ellipse(eyeX, eyeY, 20, 20);
+    float ix = eyeX - (birdImage.width / 2);
+    float iy = eyeY - (birdImage.height / 2);
+    image(mousePg, ix, iy);
   }
 }
 
@@ -157,8 +159,6 @@ class Bird {
     int bX,bY,mX,mY;
     bX = birdX;
     bY = birdY;
-    // mX = mouseX;
-    // mY = mouseY;
     mX = eyeX;
     mY = eyeY;
     if (bX <= mX && mX <= bX + birdImage.width && bY <= mY && mY <= bY + birdImage.height){
@@ -186,7 +186,6 @@ class Bird {
       if (t2 > gamen) {
         t2 = 0.0;//画面の端に行ったら原点に戻る
       }
-      // text(t2, 10, 20);
     } else {
       t2 = 0.0;
     }
