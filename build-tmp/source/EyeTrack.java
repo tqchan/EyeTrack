@@ -62,7 +62,7 @@ AudioPlayer player2;
 EyeTribe eyeTribe;
 float grid[][];
 PVector point;
-PImage img,birdImage;
+PImage img,birdImage,mouseImg;
 Bird[] bird = new Bird[10];
 int R,G,B = 0;
 int frame = 60;
@@ -104,8 +104,9 @@ public void setup() {
   w_r = width / rad;
   //mouse\u306b\u9ce5\u306e\u753b\u50cf
   mousePg = createGraphics(width, height);
+  mouseImg = loadImage("data/bbird.png");
   mousePg.beginDraw();
-  mousePg.image(birdImage, 0, 0);
+  mousePg.image(mouseImg, 0, 0);
   mousePg.endDraw();
   //\u97f3\u697d
   minim = new Minim(this);  //\u521d\u671f\u5316
@@ -128,6 +129,9 @@ public void draw() {
   }
   textSize(30);
   text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
+  if (player.isPlaying() == false) {
+    player.play(0);
+  }
 }
 
 public void Mouse(float mX, float mY){
