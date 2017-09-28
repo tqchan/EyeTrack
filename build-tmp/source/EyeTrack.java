@@ -7,12 +7,39 @@ import org.jorgecardoso.processing.eyetribe.*;
 import com.theeyetribe.client.data.*; 
 import ddf.minim.*; 
 
+import com.theeyetribe.client.*; 
+import com.theeyetribe.client.data.*; 
+import com.theeyetribe.client.reply.*; 
+import com.theeyetribe.client.request.*; 
+import org.jorgecardoso.processing.eyetribe.*; 
+import com.google.gson.*; 
+import com.google.gson.annotations.*; 
+import com.google.gson.internal.*; 
+import com.google.gson.internal.bind.*; 
+import com.google.gson.reflect.*; 
+import com.google.gson.stream.*; 
+import javazoom.jl.converter.*; 
+import javazoom.jl.decoder.*; 
+import javazoom.jl.player.*; 
+import javazoom.jl.player.advanced.*; 
+import ddf.minim.javasound.*; 
 import ddf.minim.*; 
 import ddf.minim.analysis.*; 
 import ddf.minim.effects.*; 
 import ddf.minim.signals.*; 
 import ddf.minim.spi.*; 
 import ddf.minim.ugens.*; 
+import javazoom.spi.*; 
+import javazoom.spi.mpeg.sampled.convert.*; 
+import javazoom.spi.mpeg.sampled.file.*; 
+import javazoom.spi.mpeg.sampled.file.tag.*; 
+import org.tritonus.sampled.file.*; 
+import org.tritonus.share.*; 
+import org.tritonus.share.midi.*; 
+import org.tritonus.share.sampled.*; 
+import org.tritonus.share.sampled.convert.*; 
+import org.tritonus.share.sampled.file.*; 
+import org.tritonus.share.sampled.mixer.*; 
 
 import java.util.HashMap; 
 import java.util.ArrayList; 
@@ -39,7 +66,7 @@ PImage img,birdImage;
 Bird[] bird = new Bird[10];
 int R,G,B = 0;
 int frame = 60;
-PGraphics pg,birdPg;
+PGraphics pg,birdPg,mousePg;
 int i = 0;
 int _sinMove = 0;
 int moveSpeed = 10;
@@ -68,8 +95,6 @@ public void setup() {
   //\u65e5\u672c\u8a9e\u3092\u8868\u793a\u3059\u308b\u305f\u3081\u306b\u30d5\u30a9\u30f3\u30c8\u3092\u6307\u5b9a
   font = createFont("Yu Gothic",48,true);
   textFont(font);
-  // smooth();
-  // point = new PVector();
   eyeTribe = new EyeTribe(this);
   for (int i = 0; i < bird.length; i++) {
     bird[i] = new Bird();
@@ -77,6 +102,12 @@ public void setup() {
   }
   a = width;
   w_r = width / rad;
+  //mouse\u306b\u9ce5\u306e\u753b\u50cf
+  mousePg = createGraphics(width, height);
+  mousePg.beginDraw();
+  mousePg.image(birdImage, 0, 0);
+  mousePg.endDraw();
+  //\u97f3\u697d
   minim = new Minim(this);  //\u521d\u671f\u5316
   player = minim.loadFile("bgm.mp3");  //mp3\u3092\u30ed\u30fc\u30c9\u3059\u308b
   player.play();  //\u518d\u751f
@@ -84,10 +115,8 @@ public void setup() {
 }
 
 public void draw() {
-  // background(0);
   image(pg, 0, 0);
   noStroke();
-  // Mouse(mouseX,mouseY);
   if ((_sinMove % 2) == 0) {
     for (int i = 0; i < bird.length; i++) {
       bird[i].draw();
@@ -95,7 +124,7 @@ public void draw() {
     }
   } else {
     bird[0].draw();
-    // bird[0].collision();
+    bird[0].collision();
   }
   textSize(30);
   text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
@@ -122,13 +151,13 @@ public void mousePressed(){
 public void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
   if ( gaze != null ) {
     point = gaze.get();
-    // int x = (int)constrain(round(map(point.x, 0, width, 0, COLS-1)), 0, COLS-1);
-    // int y = (int)constrain(round(map(point.y, 0, height, 0, ROWS-1)), 0, ROWS-1);
-    // grid[y][x] = constrain(grid[y][x]+10, 0, 255);
     eyeX = (int)point.x;
     eyeY = (int)point.y;
-    fill(R,G,B,255);
-    ellipse(eyeX, eyeY, 20, 20);
+    // fill(R,G,B,255);
+    // ellipse(eyeX, eyeY, 20, 20);
+    float ix = eyeX - (birdImage.width / 2);
+    float iy = eyeY - (birdImage.height / 2);
+    image(mousePg, ix, iy);
   }
 }
 
@@ -184,8 +213,6 @@ class Bird {
     int bX,bY,mX,mY;
     bX = birdX;
     bY = birdY;
-    // mX = mouseX;
-    // mY = mouseY;
     mX = eyeX;
     mY = eyeY;
     if (bX <= mX && mX <= bX + birdImage.width && bY <= mY && mY <= bY + birdImage.height){
@@ -213,7 +240,6 @@ class Bird {
       if (t2 > gamen) {
         t2 = 0.0f;//\u753b\u9762\u306e\u7aef\u306b\u884c\u3063\u305f\u3089\u539f\u70b9\u306b\u623b\u308b
       }
-      // text(t2, 10, 20);
     } else {
       t2 = 0.0f;
     }
