@@ -70,7 +70,7 @@ void draw() {
     }
   } else {
     bird[0].draw();
-    bird[0].collision();
+    // bird[0].collision();
   }
   textSize(30);
   text("得点：" + collisionNum, 10, 30);
@@ -179,12 +179,15 @@ class Bird {
     if ((_sinMove % 2) == 1 ) {
       x = t2*myScale;
       y = -A*sin(w*t2 + p2);
-      t2 += rad;    //時間を進める
+      // t2 += rad;    //時間を進める
       birdX = (int)x;
       birdY = (int)y + height / 2;
       float gamen = width/4 * rad;
       if (t2 > gamen) {
         t2 = 0.0;//画面の端に行ったら原点に戻る
+      }
+      if (birdX <= eyeX && eyeX <= (birdX + birdImage.width) && birdY <= eyeY && eyeY <= (birdY + birdImage.height)) {
+        t2 += rad;    //時間を進める
       }
     } else {
       t2 = 0.0;
