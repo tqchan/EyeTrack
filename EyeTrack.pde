@@ -29,6 +29,9 @@ float t2;  //アニメーション用経過時間（X座標）
 float rad = (TWO_PI/60.0)/3;//1秒で1回転するように30で割る。度数法だと12°,更に3で割ると1周期3秒
 float w_r = 0.0;
 float myScale = 100.0;  //画面上で見やすいように拡大
+PrintWriter output; //ファイル書き出し
+String mode; //モード格納
+int _bx, _by;
 
 void setup() {
   fullScreen();
@@ -59,11 +62,16 @@ void setup() {
   player = minim.loadFile("bgm.mp3");  //mp3をロードする
   player.play();  //再生
   player2 = minim.loadFile("atari.mp3");
+  String filename = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+  // 新しいファイルを生成
+  output = createWriter( filename + ".csv");
+  output.println("unixtime,mouseX,mouseY,collision,mode,birdX,birdY");
 }
 
 void draw() {
   image(pg, 0, 0);
   noStroke();
+  String outTime = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2) + millis();
   if ((_sinMove % 2) == 0) {
     for (int i = 0; i < bird.length; i++) {
       bird[i].draw();
@@ -78,6 +86,12 @@ void draw() {
   if (player.isPlaying() == false) {
     player.play(0);
   }
+  if ((_sinMove % 2) == 1) {
+    mode = "sin_mode" + "," + _bx + "," + _by;
+  } else {
+    mode = "mode" + (i % 2);
+  }
+  output.println(outTime + "," + mouseX + "," + mouseY + "," + collisionNum + "," + mode);
 }
 
 void Mouse(float mX, float mY){
@@ -157,6 +171,8 @@ class Bird {
         }
       }
     }
+    _bx = birdX;
+    _by = birdY;
   }
 
   void collision(){
