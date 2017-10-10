@@ -121,7 +121,12 @@ void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData da
     // ellipse(eyeX, eyeY, 20, 20);
     float ix = eyeX - (birdImage.width / 2);
     float iy = eyeY - (birdImage.height / 2);
-    image(mousePg, ix, iy);
+    if ((_sinMove % 2) == 0) {
+      image(mousePg, ix, iy);
+    } else {
+      fill(R,G,B,255);
+      ellipse(eyeX, eyeY, 20, 20);
+    }
   }
 }
 
@@ -138,10 +143,10 @@ class Bird {
     birdPg = createGraphics(width/10, height/10);
     if (i % 2 == 0) {
       birdX = (int)random(0, width);
-      birdY = 0;
+      birdY = (int)random(0, height);
     } else {
       birdY = (int)random(0, height);
-      birdX = width;
+      birdX = (int)random(0, width);
     }
     birdPg.beginDraw();
     birdPg.image(birdImage, 0, 0);
