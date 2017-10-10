@@ -145,7 +145,7 @@ public void draw() {
   } else {
     mode = "mode" + (i % 2);
   }
-  output.println(outTime + "," + mouseX + "," + mouseY + "," + collisionNum + "," + mode);
+  output.println(outTime + "," + eyeX + "," + eyeY + "," + collisionNum + "," + mode);
 }
 
 public void Mouse(float mX, float mY){
