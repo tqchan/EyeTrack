@@ -36,7 +36,7 @@ int _bx, _by;
 void setup() {
   fullScreen();
   frameRate(frame);
-  img = loadImage("data/kumo2.png");
+  img = loadImage("data/back3.png");
   pg = createGraphics(width, height);
   pg.beginDraw();
   pg.image(img,0, 0, width, height);
