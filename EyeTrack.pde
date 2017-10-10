@@ -8,7 +8,7 @@ AudioPlayer player2;
 EyeTribe eyeTribe;
 float grid[][];
 PVector point;
-PImage img,birdImage;
+PImage img,birdImage,mouseImg;
 Bird[] bird = new Bird[10];
 int R,G,B = 0;
 int frame = 60;
@@ -50,8 +50,9 @@ void setup() {
   w_r = width / rad;
   //mouseに鳥の画像
   mousePg = createGraphics(width, height);
+  mouseImg = loadImage("data/bbird.png");
   mousePg.beginDraw();
-  mousePg.image(birdImage, 0, 0);
+  mousePg.image(mouseImg, 0, 0);
   mousePg.endDraw();
   //音楽
   minim = new Minim(this);  //初期化
@@ -74,6 +75,9 @@ void draw() {
   }
   textSize(30);
   text("得点：" + collisionNum, 10, 30);
+  if (player.isPlaying() == false) {
+    player.play(0);
+  }
 }
 
 void Mouse(float mX, float mY){
