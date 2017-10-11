@@ -157,7 +157,7 @@ public void keyPressed(){
   if (key == ENTER) {
     exit();
   }
-  if (key == BACKSPACE) {
+  if (key == ' ') {
     _sinMove++;
   }
 }
