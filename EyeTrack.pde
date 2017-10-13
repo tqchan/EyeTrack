@@ -65,7 +65,7 @@ void setup() {
   player = minim.loadFile("bgm.mp3");  //mp3をロードする
   player.play();  //再生
   player2 = minim.loadFile("atari.mp3");
-  String filename = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+  String filename = "log/" + nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
   // 新しいファイルを生成
   output = createWriter( filename + ".csv");
   output.println("unixtime,mouseX,mouseY,collision,mode,birdX,birdY");
