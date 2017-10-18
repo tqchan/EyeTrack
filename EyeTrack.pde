@@ -1,6 +1,7 @@
 import org.jorgecardoso.processing.eyetribe.*;
 import com.theeyetribe.client.data.*;
 import ddf.minim.*;  //minimライブラリのインポート
+import java.util.Date;
  
 Minim minim;  //Minim型変数であるminimの宣言
 AudioPlayer player;  //サウンドデータ格納用の変数
@@ -32,6 +33,8 @@ float myScale = 100.0;  //画面上で見やすいように拡大
 PrintWriter output; //ファイル書き出し
 String mode; //モード格納
 int _bx, _by;
+Date d;
+
 
 void setup() {
   fullScreen();
@@ -62,16 +65,18 @@ void setup() {
   player = minim.loadFile("bgm.mp3");  //mp3をロードする
   player.play();  //再生
   player2 = minim.loadFile("atari.mp3");
-  String filename = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+  String filename = "log/" + nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
   // 新しいファイルを生成
   output = createWriter( filename + ".csv");
   output.println("unixtime,mouseX,mouseY,collision,mode,birdX,birdY");
 }
 
 void draw() {
+  d = new Date();
   image(pg, 0, 0);
   noStroke();
-  String outTime = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2) + millis();
+  // String outTime = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2) + millis();
+  long outTime = d.getTime();
   if ((_sinMove % 2) == 0) {
     for (int i = 0; i < bird.length; i++) {
       bird[i].draw();
