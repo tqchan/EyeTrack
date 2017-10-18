@@ -101,6 +101,8 @@ void Mouse(float mX, float mY){
 
 void keyPressed(){
   if (key == ENTER) {
+    output.flush();
+    output.close();
     exit();
   }
   if (key == ' ') {
@@ -206,7 +208,7 @@ class Bird {
       y = -A*sin(w*t2 + p2);
       // t2 += rad;    //時間を進める
       birdX = (int)x;
-      birdY = (int)y + height / 2;
+      birdY = (int)y + (height / 2);
       float gamen = width/4 * rad;
       if (t2 > gamen) {
         t2 = 0.0;//画面の端に行ったら原点に戻る

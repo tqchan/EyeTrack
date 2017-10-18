@@ -155,6 +155,8 @@ public void Mouse(float mX, float mY){
 
 public void keyPressed(){
   if (key == ENTER) {
+    output.flush();
+    output.close();
     exit();
   }
   if (key == ' ') {
@@ -260,7 +262,7 @@ class Bird {
       y = -A*sin(w*t2 + p2);
       // t2 += rad;    //\u6642\u9593\u3092\u9032\u3081\u308b
       birdX = (int)x;
-      birdY = (int)y + height / 2;
+      birdY = (int)y + (height / 2);
       float gamen = width/4 * rad;
       if (t2 > gamen) {
         t2 = 0.0f;//\u753b\u9762\u306e\u7aef\u306b\u884c\u3063\u305f\u3089\u539f\u70b9\u306b\u623b\u308b
