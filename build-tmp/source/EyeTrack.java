@@ -6,6 +6,7 @@ import processing.opengl.*;
 import org.jorgecardoso.processing.eyetribe.*; 
 import com.theeyetribe.client.data.*; 
 import ddf.minim.*; 
+import java.util.Date; 
 
 import com.theeyetribe.client.*; 
 import com.theeyetribe.client.data.*; 
@@ -55,6 +56,7 @@ public class EyeTrack extends PApplet {
 
 
   //minim\u30e9\u30a4\u30d6\u30e9\u30ea\u306e\u30a4\u30f3\u30dd\u30fc\u30c8
+
  
 Minim minim;  //Minim\u578b\u5909\u6570\u3067\u3042\u308bminim\u306e\u5ba3\u8a00
 AudioPlayer player;  //\u30b5\u30a6\u30f3\u30c9\u30c7\u30fc\u30bf\u683c\u7d0d\u7528\u306e\u5909\u6570
@@ -86,6 +88,9 @@ float myScale = 100.0f;  //\u753b\u9762\u4e0a\u3067\u898b\u3084\u3059\u3044\u308
 PrintWriter output; //\u30d5\u30a1\u30a4\u30eb\u66f8\u304d\u51fa\u3057
 String mode; //\u30e2\u30fc\u30c9\u683c\u7d0d
 int _bx, _by;
+Date d;
+boolean examination = false;
+
 
 public void setup() {
   
@@ -116,16 +121,18 @@ public void setup() {
   player = minim.loadFile("bgm.mp3");  //mp3\u3092\u30ed\u30fc\u30c9\u3059\u308b
   player.play();  //\u518d\u751f
   player2 = minim.loadFile("atari.mp3");
-  String filename = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+  d = new Date();
+  String filename = "log/" + nf(year(),4) + "_" + nf(month(),2) + "_" + nf(day(),2) + "_" + nf(hour(),2) + "_" + nf(minute(),2) + "_" + nf(second(),2);
   // \u65b0\u3057\u3044\u30d5\u30a1\u30a4\u30eb\u3092\u751f\u6210
   output = createWriter( filename + ".csv");
   output.println("unixtime,mouseX,mouseY,collision,mode,birdX,birdY");
 }
 
 public void draw() {
+  d = new Date();
   image(pg, 0, 0);
   noStroke();
-  String outTime = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2) + millis();
+  long outTime = d.getTime();
   if ((_sinMove % 2) == 0) {
     for (int i = 0; i < bird.length; i++) {
       bird[i].draw();
@@ -133,7 +140,6 @@ public void draw() {
     }
   } else {
     bird[0].draw();
-    // bird[0].collision();
   }
   textSize(30);
   text("\u5f97\u70b9\uff1a" + collisionNum, 10, 30);
@@ -160,12 +166,16 @@ public void keyPressed(){
     exit();
   }
   if (key == ' ') {
-    _sinMove++;
+    // _sinMove++;
+    examination = true;
+    t2 = 0.0f;
   }
 }
 
 public void mousePressed(){
-  i++;
+  // i++;
+  examination = false;
+  _sinMove++;
 }
 
 public void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
@@ -252,7 +262,9 @@ class Bird {
       }
       player2.play();
       player2.rewind();  //\u518d\u751f\u304c\u7d42\u308f\u3063\u305f\u3089\u5dfb\u304d\u623b\u3057\u3066\u304a\u304f
-      collisionNum ++;
+      if (examination) {
+        collisionNum ++;
+      }
     }
   }
 

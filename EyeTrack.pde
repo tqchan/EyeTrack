@@ -34,6 +34,8 @@ PrintWriter output; //ファイル書き出し
 String mode; //モード格納
 int _bx, _by;
 Date d;
+boolean examination = false;
+int examinationNo = 0;
 
 
 void setup() {
@@ -65,7 +67,8 @@ void setup() {
   player = minim.loadFile("bgm.mp3");  //mp3をロードする
   player.play();  //再生
   player2 = minim.loadFile("atari.mp3");
-  String filename = "log/" + nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+  d = new Date();
+  String filename = "log/" + nf(year(),4) + "_" + nf(month(),2) + "_" + nf(day(),2) + "_" + nf(hour(),2) + "_" + nf(minute(),2) + "_" + nf(second(),2);
   // 新しいファイルを生成
   output = createWriter( filename + ".csv");
   output.println("unixtime,mouseX,mouseY,collision,mode,birdX,birdY");
@@ -75,7 +78,6 @@ void draw() {
   d = new Date();
   image(pg, 0, 0);
   noStroke();
-  // String outTime = nf(year(),4) + nf(month(),2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2) + millis();
   long outTime = d.getTime();
   if ((_sinMove % 2) == 0) {
     for (int i = 0; i < bird.length; i++) {
@@ -84,7 +86,6 @@ void draw() {
     }
   } else {
     bird[0].draw();
-    // bird[0].collision();
   }
   textSize(30);
   text("得点：" + collisionNum, 10, 30);
@@ -96,7 +97,9 @@ void draw() {
   } else {
     mode = "mode" + (i % 2);
   }
-  output.println(outTime + "," + eyeX + "," + eyeY + "," + collisionNum + "," + mode);
+  if (examination) {
+    output.println(outTime + "," + eyeX + "," + eyeY + "," + collisionNum + "," + mode);
+  }
 }
 
 void Mouse(float mX, float mY){
@@ -111,12 +114,26 @@ void keyPressed(){
     exit();
   }
   if (key == ' ') {
-    _sinMove++;
+    // _sinMove++;
+    examinationNo++;
+    if ((examinationNo % 2) == 0) {
+      examination = false;
+      collisionNum = 0;
+    } else {
+      examination = true;
+    }
+    t2 = 0.0;
+  }
+  if (key == '1') {
+    i++;
   }
 }
 
 void mousePressed(){
-  i++;
+  // i++;
+  examination = false;
+  examinationNo = 0;
+  _sinMove++;
 }
 
 void onGazeUpdate(PVector gaze, PVector leftEye_, PVector rightEye_, GazeData data) {
@@ -203,7 +220,9 @@ class Bird {
       }
       player2.play();
       player2.rewind();  //再生が終わったら巻き戻しておく
-      collisionNum ++;
+      if (examination) {
+        collisionNum ++;
+      }
     }
   }
 
